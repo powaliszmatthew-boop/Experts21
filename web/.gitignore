@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.netlify/
+# Generated at build time from ../.claude, ../knowledge and ../docs
+netlify/shared/team.generated.json
+src/generated/

@@ -29,6 +29,7 @@ Full job descriptions and the agent ↔ skill matrix are in `docs/expert-roster.
 - `knowledge/<agent>/`: each agent's private knowledge folder, read before every answer. Its `README.md` says what belongs there; shared research stays in `docs/`.
 - `.claude/skills/<skill>/SKILL.md`: 33 skills. 30 are domain skills shared across agents, plus `team-routing`, `agent-skill-authoring`, and the user-only `ask-experts`.
 - `docs/`: research (01-09), `expert-roster.md`, `agent-brains.md`, `team-changelog.md`.
+- `web/`: React chat app for the team, deployed on Netlify (`netlify.toml` at the root). It reads the agents, their skills, `knowledge/` folders and `docs/` at build time, so changes to them reach the app on the next deploy. Deploy steps: `web/README.md`.
 
 ## Conventions (all agents)
 - Label claims **Verified** (official source), **Reported** (secondary source), or **Estimate** (our model), and cite sources. Never invent figures.

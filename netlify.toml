@@ -1,0 +1,14 @@
+# Netlify reads this file from the repository root. No settings are needed in the Netlify UI
+# except the ANTHROPIC_API_KEY environment variable (see web/README.md).
+[build]
+  # The app lives in web/. Its build script reads the agents, skills, knowledge folders and docs
+  # from the rest of this repo, so changes to them are picked up on every deploy.
+  command = "npm --prefix web ci && npm --prefix web run build"
+  publish = "web/dist"
+  functions = "web/netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"
