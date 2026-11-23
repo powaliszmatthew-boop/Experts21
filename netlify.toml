@@ -1,14 +1,28 @@
 # Netlify reads this file from the repository root. No settings are needed in the Netlify UI
 # except the ANTHROPIC_API_KEY environment variable (see web/README.md).
 [build]
-  # The app lives in web/. Its build script reads the agents, skills, knowledge folders and docs
-  # from the rest of this repo, so changes to them are picked up on every deploy.
-  command = "npm --prefix web ci && npm --prefix web run build"
-  publish = "web/dist"
-  functions = "web/netlify/functions"
+  # The app lives in web/. The paths below are relative to it. Its build script also reads the
+  # agents, skills, knowledge folders and docs from the rest of this repo, so changes to them
+  # are picked up on every deploy.
+  base = "web"
+  command = "npm ci && npm run build"
+  publish = "dist"
+  # The API runs as Edge Functions: unlike regular Netlify Functions (10-60 s limit, depending
+  # on the account), they can stream a long Claude answer for as long as it takes.
+  edge_functions = "netlify/edge-functions"
 
 [build.environment]
   NODE_VERSION = "22"
 
-[functions]
-  node_bundler = "esbuild"
+# API routes (each file in web/netlify/edge-functions/ handles one route).
+[[edge_functions]]
+  path = "/api/chat"
+  function = "chat"
+
+[[edge_functions]]
+  path = "/api/plan"
+  function = "plan"
+
+[[edge_functions]]
+  path = "/api/synthesize"
+  function = "synthesize"

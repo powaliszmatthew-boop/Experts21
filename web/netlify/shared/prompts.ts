@@ -1,6 +1,6 @@
 // Builds system prompts from the repo's agent definitions, skills, knowledge folders and docs.
 import type Anthropic from "@anthropic-ai/sdk";
-import { team, type Agent, type Skill, ROUTABLE_AGENT_IDS, getAgent } from "./team";
+import { team, type Agent, type Skill, ROUTABLE_AGENT_IDS, getAgent } from "./team.ts";
 
 type SystemBlock = Anthropic.Beta.BetaTextBlockParam;
 

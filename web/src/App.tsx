@@ -86,7 +86,7 @@ export default function App() {
       );
       update((t) => ({
         ...t,
-        status: result.error ? "error" : result.stop === "timeout" ? "partial" : "done",
+        status: result.error ? (result.text ? "partial" : "error") : result.stop === "incomplete" ? "partial" : "done",
         notices: result.error ? [...t.notices, result.error] : t.notices,
       }));
     } catch (err) {
@@ -131,7 +131,7 @@ export default function App() {
             },
             signal,
           );
-          const status: ExpertRun["status"] = r.error ? (r.text ? "partial" : "failed") : r.stop === "timeout" ? "partial" : "ok";
+          const status: ExpertRun["status"] = r.error ? (r.text ? "partial" : "failed") : r.stop === "incomplete" || r.stop === "max_tokens" ? "partial" : "ok";
           experts[i].status = status;
           updateExpert(i, (x) => ({ ...x, status, notices: r.error ? [...x.notices, r.error] : x.notices }));
         } catch (err) {
@@ -171,7 +171,7 @@ export default function App() {
         ...t,
         phase: r.error && !r.text ? "error" : "done",
         error: r.error,
-        synthesisStatus: r.error ? "error" : r.stop === "timeout" ? "partial" : "done",
+        synthesisStatus: r.error ? "error" : r.stop === "incomplete" ? "partial" : "done",
       }));
     } catch (err) {
       const msg = handleError(err);

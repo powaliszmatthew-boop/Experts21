@@ -1,11 +1,9 @@
-// POST /api/chat — streams one expert's answer.
+// POST /api/chat — streams one expert's answer (Claude API server-sent events).
 // Body: { agent: string, messages: {role, content}[], team?: boolean }
-//   team: true when the orchestrator's brief is being answered in "Ask the whole team" mode.
-import type { Config } from "@netlify/functions";
-import { getAgent, resolveModel } from "../shared/team";
-import { expertSystem, teamExpertSystem } from "../shared/prompts";
-import { effortFromEnv, streamToBrowser } from "../shared/claude";
-import { checkPassword, errorResponse, HttpError, parseMessages, readJson } from "../shared/http";
+//   team: true when an expert is answering the orchestrator's brief in "Ask the whole team" mode.
+import { getAgent, resolveModel } from "../shared/team.ts";
+import { expertSystem, teamExpertSystem } from "../shared/prompts.ts";
+import { checkPassword, effortFromEnv, errorResponse, HttpError, parseMessages, readJson, streamClaude } from "../shared/server.ts";
 
 export default async (req: Request) => {
   try {
@@ -15,19 +13,19 @@ export default async (req: Request) => {
     if (!agent) throw new HttpError(400, "Unknown agent");
     const messages = parseMessages(body.messages);
     const isTeam = body.team === true;
-    return streamToBrowser(
+    return await streamClaude(
       {
         model: resolveModel(agent.model),
         system: isTeam ? teamExpertSystem(agent) : expertSystem(agent),
         messages,
         effort: isTeam ? effortFromEnv("EFFORT_TEAM_EXPERT", "low") : effortFromEnv("EFFORT_CHAT", "medium"),
-        maxTokens: 16000,
+        maxTokens: 32000,
       },
-      req.signal,
+      req,
     );
   } catch (err) {
     return errorResponse(err);
   }
 };
 
-export const config: Config = { path: "/api/chat", method: "POST" };
+// Route: see [[edge_functions]] in netlify.toml at the repo root.

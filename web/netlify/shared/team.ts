@@ -1,5 +1,5 @@
 // Server-side view of the team, generated at build time by scripts/build-team.mjs.
-import teamData from "./team.generated.json";
+import teamData from "./team.generated.ts";
 
 export interface Skill {
   name: string;

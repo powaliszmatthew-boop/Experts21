@@ -1,14 +1,12 @@
 // POST /api/synthesize — "Ask the whole team", step 3: the orchestrator combines the experts' answers.
 // Body: {
 //   messages: {role, content}[]   the team conversation so far, ending with the new question
-//   assumptions: string           from /api/plan
+//   assumptions: string           from the plan
 //   results: { agent, brief, answer, status: "ok" | "partial" | "failed" }[]
 // }
-import type { Config } from "@netlify/functions";
-import { getAgent, ORCHESTRATOR_ID, resolveModel } from "../shared/team";
-import { synthesisSystem } from "../shared/prompts";
-import { effortFromEnv, streamToBrowser } from "../shared/claude";
-import { checkPassword, errorResponse, HttpError, LIMITS, parseMessages, readJson } from "../shared/http";
+import { getAgent, ORCHESTRATOR_ID, resolveModel } from "../shared/team.ts";
+import { synthesisSystem } from "../shared/prompts.ts";
+import { checkPassword, effortFromEnv, errorResponse, HttpError, LIMITS, parseMessages, readJson, streamClaude } from "../shared/server.ts";
 
 const escapeAttr = (s: string) => s.replace(/[<>&"]/g, "");
 
@@ -37,20 +35,19 @@ export default async (req: Request) => {
       `The experts' answers (status "partial" means the answer was cut off; "failed" means none came back):\n\n${answers.join("\n\n")}\n\n` +
       `Now write the combined answer for the consultant.`;
 
-    const orchestrator = getAgent(ORCHESTRATOR_ID)!;
-    return streamToBrowser(
+    return await streamClaude(
       {
-        model: resolveModel(orchestrator.model),
+        model: resolveModel(getAgent(ORCHESTRATOR_ID)!.model),
         system: synthesisSystem(),
         messages: [...messages.slice(0, -1), { role: "user", content: finalTurn }],
         effort: effortFromEnv("EFFORT_SYNTHESIS", "medium"),
-        maxTokens: 16000,
+        maxTokens: 32000,
       },
-      req.signal,
+      req,
     );
   } catch (err) {
     return errorResponse(err);
   }
 };
 
-export const config: Config = { path: "/api/synthesize", method: "POST" };
+// Route: see [[edge_functions]] in netlify.toml at the repo root.
