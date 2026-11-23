@@ -2,7 +2,7 @@
 
 This roster lists the advisory agents for the consultant's engagement and the skills they need. It is built on the research in this folder (see [README.md](README.md)). Each agent is a Claude Code project subagent in `.claude/agents/<agent>.md`, and each skill is a project skill in `.claude/skills/<skill>/SKILL.md`. The **Docs** column lists the research files each agent relies on, by number (e.g. `05` = [05-operating-costs.md](05-operating-costs.md)).
 
-**27 agents · 33 skills.** Skills are shared: the skill table lists which agents use (preload) each skill, and the agent tables list each agent's skills. How to use the team: see [`CLAUDE.md`](../CLAUDE.md).
+**27 agents · 33 skills.** Skills are shared: the skill table lists which agents use (preload) each skill, and the agent tables list each agent's skills. How to use the team: see [`CLAUDE.md`](../CLAUDE.md). Each agent's model, name, and persona: [agent-brains.md](agent-brains.md). Each agent reads its own knowledge folder, `knowledge/<agent>/`, before answering.
 
 > The legal, tax, and insurance agents give research-level guidance only. A licensed Florida attorney, CPA, or insurance broker must sign off before anything is filed, signed, or bound.
 

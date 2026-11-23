@@ -29,7 +29,10 @@ Rules from the official docs (code.claude.com/docs/en/sub-agents and /skills, re
 2. Every expert preloads `source-verification`. Each preloaded skill must exist in `.claude/skills/`.
 3. Domain facts live in `docs/`; skills summarize them and point to the file. Don't duplicate large tables.
 4. Label claims Verified / Reported / Estimate. Legal, tax, and insurance agents state that licensed sign-off is required.
-5. When you add, rename, or remove an agent or skill, also update: `docs/expert-roster.md` (agents table + skills table with "Used by"), the routing map in `.claude/skills/team-routing/SKILL.md`, the team table in `CLAUDE.md`, and `docs/team-changelog.md`.
+5. Every agent sets `model`: `opus` for deep strategy, legal, and finance judgment; `sonnet` for most specialist work; `haiku` for fast, simple lookups. Record the choice and reason in `docs/agent-brains.md`.
+6. Every agent has a `## Persona` section (unique first name, voice, working style) right after its opening "You are the **Role**" line, followed by a `## Knowledge folder (read first)` section. Copy both from an existing agent.
+7. Every agent has `knowledge/<agent>/README.md` describing which documents belong there. Rename or remove the folder with the agent.
+8. When you add, rename, or remove an agent or skill, also update: `docs/agent-brains.md` (for agents), `docs/expert-roster.md` (agents table + skills table with "Used by"), the routing map in `.claude/skills/team-routing/SKILL.md`, the team table in `CLAUDE.md`, and `docs/team-changelog.md`.
 
 ## Workflow
 1. **Understand the request:** a new role, a new skill, or an improvement (to which file, and why). For improvements, collect the evidence: a bad answer, a gap, or stale facts.

@@ -22,12 +22,13 @@ This project is an advisory team of Claude Code subagents that helps a consultan
 | Operations & People | `cafe-operations-manager`, `talent-training-lead`, `technology-ordering-specialist` |
 | Marketing & Growth | `brand-creative-director`, `digital-social-marketer`, `pr-community-manager`, `wholesale-b2b-lead` |
 
-Full job descriptions and the agent ↔ skill matrix are in `docs/expert-roster.md`.
+Full job descriptions and the agent ↔ skill matrix are in `docs/expert-roster.md`. Each agent's model (`opus` / `sonnet` / `haiku`), first name, voice, and working style are in `docs/agent-brains.md`.
 
 ## Layout
 - `.claude/agents/<agent>.md`: subagent definitions (frontmatter + system prompt). Each one preloads its skills through the `skills` field.
+- `knowledge/<agent>/`: each agent's private knowledge folder, read before every answer. Its `README.md` says what belongs there; shared research stays in `docs/`.
 - `.claude/skills/<skill>/SKILL.md`: 33 skills. 30 are domain skills shared across agents, plus `team-routing`, `agent-skill-authoring`, and the user-only `ask-experts`.
-- `docs/`: research (01-09), `expert-roster.md`, `team-changelog.md`.
+- `docs/`: research (01-09), `expert-roster.md`, `agent-brains.md`, `team-changelog.md`.
 
 ## Conventions (all agents)
 - Label claims **Verified** (official source), **Reported** (secondary source), or **Estimate** (our model), and cite sources. Never invent figures.
@@ -36,7 +37,7 @@ Full job descriptions and the agent ↔ skill matrix are in `docs/expert-roster.
 - Only `expert-orchestrator` spawns subagents; experts answer their brief and name hand-offs.
 
 ## Maintaining the team
-After any change to agents or skills, keep `docs/expert-roster.md`, the routing map in `.claude/skills/team-routing/SKILL.md`, this file, and `docs/team-changelog.md` in sync. Then run:
+After any change to agents or skills, keep `docs/expert-roster.md`, `docs/agent-brains.md`, the agent's `knowledge/<agent>/` folder, the routing map in `.claude/skills/team-routing/SKILL.md`, this file, and `docs/team-changelog.md` in sync. Then run:
 
 ```bash
 python3 .claude/skills/agent-skill-authoring/scripts/validate_team.py

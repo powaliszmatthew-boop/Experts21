@@ -96,6 +96,12 @@ for root, _, files in os.walk(AG):
             if s not in skills: errors.append(f"{p}: preloads missing skill '{s}'")
             elif str(skills[s].get("disable-model-invocation", "")).lower() in ("true", "yes", "on", "1"):
                 errors.append(f"{p}: preloads '{s}', which sets disable-model-invocation (can't be preloaded)")
+        if not data.get("model"): warns.append(f"{p}: no model set (see docs/agent-brains.md)")
+        elif str(data["model"]) not in ("opus", "sonnet", "haiku", "fable", "inherit") and not str(data["model"]).startswith("claude-"):
+            errors.append(f"{p}: model '{data['model']}' is not an alias, a claude- model ID, or inherit")
+        if "## Persona" not in body: warns.append(f"{p}: no '## Persona' section")
+        if not os.path.isfile(os.path.join(ROOT, "knowledge", name, "README.md")): warns.append(f"{p}: missing knowledge/{name}/README.md")
+        if f"knowledge/{name}/" not in body: warns.append(f"{p}: system prompt doesn't tell the agent to read knowledge/{name}/")
         tools = str(data.get("tools", ""))
         if "Agent" in tools and name != "expert-orchestrator":
             warns.append(f"{p}: has the Agent tool; by convention only expert-orchestrator spawns subagents")
@@ -118,6 +124,15 @@ for a in agents:
     if a not in claude_md: warns.append(f"agent '{a}' missing from CLAUDE.md")
     if a not in ("expert-orchestrator", "team-builder") and f"`{a}`" not in routing:
         warns.append(f"agent '{a}' missing from team-routing map")
+brains = read("docs/agent-brains.md")
+for a in agents:
+    if f"`{a}`" not in brains: warns.append(f"agent '{a}' missing from docs/agent-brains.md")
+names = {}
+for a, p in agents.items():
+    m = re.search(r"^You are \*\*([^*]+)\*\*, the team's", open(p, encoding="utf-8").read(), re.M)
+    if m:
+        if m.group(1) in names: errors.append(f"agents '{a}' and '{names[m.group(1)]}' share the persona name {m.group(1)}")
+        names[m.group(1)] = a
 for s in skills:
     if f"`{s}`" not in roster: warns.append(f"skill '{s}' missing from docs/expert-roster.md")
 
