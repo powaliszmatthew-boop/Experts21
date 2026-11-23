@@ -25,7 +25,8 @@ Each file sorts its claims into three levels:
 | 7 | [07-staffing.md](07-staffing.md) | Wages, required certifications, employer obligations, roles |
 | 8 | [08-marketing.md](08-marketing.md) | Positioning, channels, launch plan |
 | 9 | [09-risks.md](09-risks.md) | The biggest risks, ranked, with mitigations |
-| — | [expert-roster.md](expert-roster.md) | Advisory agent roster (25 roles) and shared skills (30) |
+| — | [expert-roster.md](expert-roster.md) | Expert team roster (27 agents) and shared skills (33) |
+| — | [how-to-talk-to-your-experts.md](how-to-talk-to-your-experts.md) | Example prompts and how to ask one expert or the whole team |
 
 ## Key takeaways
 
